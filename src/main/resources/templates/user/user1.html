@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<!--<head th:include="include :: header"></head>-->
+<head th:insert="~{include :: header}"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+
+<!--<body class="gray-bg">-->
+<body class="no-skin">
+
+<div class="container-div ui-layout-center">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <div class="page-header">
+                    <h1>
+                        后台用户
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            用户管理
+                        </small>
+                    </h1>
+                </div><!-- /.page-header -->
+                <div class="row" style="margin-left:12px">
+                    <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+                        <a class="btn btn-success" href="javascript:void(0)" onclick="add()">
+                            <i class="fa fa-plus"></i> 新增
+                        </a>
+                        <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+                            <i class="fa fa-edit"></i> 修改
+                        </a>
+                        <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
+                            <i class="fa fa-remove"></i> 删除
+                        </a>
+                    </div>
+                    <!--<div class="col-sm-12 select-table table-striped">
+                        <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                    </div>-->
+
+                    <td class="col-sm-12 select-table table-striped">
+                        <table id="bootstrap-table" data-mobile-responsive="true" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="bs-checkbox " style="width: 36px; " data-field="0" tabindex="0">
+                                    <div class="th-inner "><input name="btSelectAll" type="checkbox"></div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="" data-field="userId" tabindex="0">
+                                    <div class="th-inner ">用户ID</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="" data-field="loginName" tabindex="0">
+                                    <div class="th-inner sortable both">登录名称</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="" data-field="userName" tabindex="0">
+                                    <div class="th-inner ">用户名称</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="" data-field="phonenumber" tabindex="0">
+                                    <div class="th-inner ">手机</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="text-align: center; " data-field="status" tabindex="0">
+                                    <div class="th-inner ">状态</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="" data-field="createTime" tabindex="0">
+                                    <div class="th-inner sortable both desc">创建时间</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                                <th style="text-align: center; " data-field="8" tabindex="0">
+                                    <div class="th-inner ">操作</div>
+                                    <div class="fht-cell"></div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--<tr data-th-each="user : ${list}">-->
+                            <tr th:each="user:${list}">
+                                <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                                <td th:text="${user.userId}"></td>
+                                <td th:text="${user.loginName}"></td>
+                                <td th:text="${user.userName}"></td>
+                                <td th:text="${user.phonenumber}"></td>
+                                <td align="center"><span th:if="${user.status} == 0">正常</span><span
+                                        th:if="${user.status} == 1">停用</span></td>
+                                <td th:text="${#calendars.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td align="center">
+                                    <a class="btn btn-success btn-xs " th:href="@{'user/edit/'+${user.userId}}"><i
+                                            class="fa fa-edit"></i>编辑</a>
+                                    <a class="btn btn-danger btn-xs del" th:data-id="${user.userId}"
+                                       href="javascript:void(0)"><i
+                                            class="fa fa-remove"></i>删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div th:utext="${page}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div th:include="include :: footer"></div>-->
+    <div th:insert="~{include :: footer}"></div>
+    <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+    <script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
+</body>
+</html>
+<script th:inline="javascript">
+    var prefix = ctx + "user";
+
+    /* $(function () {
+         $('body').layout({west__size: 185});
+         queryUserList();
+     });*/
+
+    function add() {
+        layer.open({
+            type: 2,
+            maxmin: true,
+            shade: 0.3,
+            title: "添加用户",
+            fix: false,
+            area: ['800px', '600px'],
+            content: prefix + "/add",
+            shadeClose: true,
+            btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
+            yes: function (index, layero) {
+                let iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler();
+            }, cancel: function () {
+                return true;
+            }
+        });
+    }
+
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "用户",
+            search: false,
+            showExport: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userId',
+                    title: '用户ID'
+                },
+                {
+                    field: 'loginName',
+                    title: '登录名称',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '用户名称'
+                },
+                {
+                    field: 'email',
+                    title: '邮箱',
+                    visible: false
+                },
+                {
+                    field: 'phonenumber',
+                    title: '手机'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.status == "0") {
+                            return '<span class="badbootstrap-table.min.jsbootstrap-table.min.jsge badge-primary">正常</span>';
+                        }
+                        else if (row.status == "1") {
+                            return '<span class="badge badge-danger">停用</span>';
+                        }
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="#" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="#" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-info btn-xs" href="#" onclick="resetPwd(\'' + row.userId + '\')"><i class="fa fa-key"></i>重置</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    /*用户管理-重置密码*/
+    function resetPwd(userId) {
+        var url = prefix + '/resetPwd/' + userId;
+        $.modal.open("重置密码", url, '800', '300');
+    }
+
+    $(".del").click(function () {
+        if (confirm("您确定要删除吗？")) {
+            let $th = $(this);
+            var userId = $th.attr("data-id");
+            $.ajax({
+                cache: true,
+                type: "delete",
+                url: ctx + "user/remove/" + userId,
+                async: false,
+                error: function (request) {
+                    $.modal.alertError("系统错误");
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+    })
+</script>
