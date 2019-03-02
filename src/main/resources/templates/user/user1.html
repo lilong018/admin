@@ -84,8 +84,8 @@
                                 <td th:text="${user.loginName}"></td>
                                 <td th:text="${user.userName}"></td>
                                 <td th:text="${user.phonenumber}"></td>
-                                <td align="center"><span th:if="${user.status} == 0">正常</span><span
-                                        th:if="${user.status} == 1">停用</span></td>
+                                <td align="center"><span th:if="${user.status} == 1">正常</span><span
+                                        th:if="${user.status} == 0">停用</span></td>
                                 <td th:text="${#calendars.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td align="center">
                                     <a class="btn btn-success btn-xs " th:href="@{'user/edit/'+${user.userId}}"><i
@@ -230,4 +230,9 @@
             });
         }
     })
+
+    //用户删除
+    function deleteUser(userId) {
+        status
+    }
 </script>

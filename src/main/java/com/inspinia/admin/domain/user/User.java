@@ -41,8 +41,8 @@ public class User implements Serializable {
     @Max(value = 12,message = "密码长度不得超狗12")
     private String password;
 
-    /** 帐号状态（0正常 1停用） */
-    private String status;
+    /** 帐号状态（0停用 1正常） */
+    private int status;
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
@@ -127,11 +127,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -18,4 +18,6 @@ public interface UserMapper {
     public int deleteUser(Long userId);
 
     public int deleteUserByIds(Long[] userIds);
+
+    public User checkPhoneUnique(String phonenumber);
 }

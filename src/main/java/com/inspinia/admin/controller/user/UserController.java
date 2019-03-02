@@ -77,6 +77,14 @@ public class UserController extends BaseController {
         mmap.put("user", userService.selectUserById(userId));
         return "user/edit";
     }
+    /**
+     * 校验手机号码
+     */
+    @PostMapping("/checkPhoneUnique")
+    @ResponseBody
+    public String checkPhoneUnique(User user) {
+        return userService.checkPhoneUnique(user);
+    }
 
     /**
      * 修改用户

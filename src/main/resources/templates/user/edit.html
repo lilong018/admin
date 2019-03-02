@@ -51,10 +51,6 @@
                      </div>
 				</div>
 			</div>
-			<div class="layui-layer-btn layui-layer-btn-">
-				<a class="layui-layer-btn0" onclick="edit()">确定</a>
-				<a class="layui-layer-btn1" href="javascript:history.go(-1)">关闭</a>
-			</div>
 		</form>
 	</div>
 
@@ -68,47 +64,7 @@
         		},
         		deptName:{
         			required:true,
-        		},
-        		email:{
-        			required:true,
-                    email:true,
-                    remote: {
-                        url: ctx + "user/checkEmailUnique",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                        	"userId": function() {
-                                return $("#userId").val();
-                            },
-                			"email": function() {
-                                return $.common.trim($("#email").val());
-                            }
-                        },
-                        dataFilter: function (data, type) {
-                        	return $.validate.unique(data);
-                        }
-                    }
-        		},
-        		phonenumber:{
-        			required:true,
-        			isPhone:true,
-                    remote: {
-                        url: ctx + "user/checkPhoneUnique",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                        	"userId": function() {
-                        		return $("#userId").val();
-                            },
-                			"phonenumber": function() {
-                                return $.common.trim($("#phonenumber").val());
-                            }
-                        },
-                        dataFilter: function (data, type) {
-                        	return $.validate.unique(data);
-                        }
-                    }
-        		},
+        		}
         	},
         	messages: {
         		"email": {
@@ -119,7 +75,6 @@
         		}
             },
         	submitHandler:function(form){
-                alert("submitHandler");
         		edit();
         	}
         });
@@ -154,7 +109,7 @@
         			$.modal.alertError("系统错误");
         		},
         		success : function(data) {
-                    window.history.back(-1);
+                    $.operate.saveSuccess(data);
         		}
         	});
         }

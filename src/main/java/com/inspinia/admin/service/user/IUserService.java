@@ -18,4 +18,6 @@ public interface IUserService {
 
     public int deleteUserByIds(String ids) throws Exception;
 
+    public String checkPhoneUnique(User user);
+
 }

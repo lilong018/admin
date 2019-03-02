@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<!--
+ table 数据表格文档 - layui.table
+https://www.layui.com/doc/modules/table.html-->
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
@@ -61,84 +64,173 @@
 <div class="main-content">
     <div class="main-content-inner">
         <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-            <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-                <a class="btn btn-success" href="javascript:void(0)" onclick="add()">
-                    <i class="fa fa-plus"></i> 新增
-                </a>
-                <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-            </div>
-            <div class="nav-search" id="nav-search">
-                <form class="form-search">
+
+            <div class="page-header">
+                <h1>
+                    后台管理
+                    <small>
+                        <i class="ace-icon fa fa-angle-double-right"></i>
+                        系统用户
+                    </small>
+                </h1>
+            </div><!-- /.page-header -->
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+                                    <a class="btn btn-success" href="javascript:void(0)" onclick="add()">
+                                        <i class="fa fa-plus"></i> 新增
+                                    </a>
+                                    <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
+                                        <i class="fa fa-remove"></i> 删除
+                                    </a>
+                                    <a class="btn btn-success" href="javascript:void(0)"  ay-data="{id:‘myTable‘}" onclick="test()" lay-event="del">
+                                        <i class="fa fa-plus"></i> 测试
+                                    </a>
+                                </div>
+                                <div class="nav-search" id="nav-search">
+                                    <form class="form-search">
                                 <span class="input-icon">
                                     <input type="text" placeholder="Search ..." class="nav-search-input"
                                            id="nav-search-input" autocomplete="off"/>
                                     <i class="ace-icon fa fa-search nav-search-icon"></i>
                                 </span>
-                </form>
-            </div><!-- /.nav-search -->
+                                    </form>
+                                </div><!-- /.nav-search -->
+                                <table id="simple-table" class="table  table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace" id="selectBox"/>
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </th>
+                                        <th>用户ID</th>
+                                        <th>登录名称</th>
+                                        <th>用户名称</th>
+                                        <th>手机</th>
+                                        <th class="hidden-480">状态</th>
+                                        <th class="hidden-480">创建时间</th>
+                                        <th class="hidden-480">操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <!--<tr data-th-each="user : ${list}">-->
+                                    <!--/*@thymesVar id="list" type="list"*/-->
+                                    <tr th:each="user:${list}">
+                                        <td class="center">
+                                            <label class="pos-rel">
+                                                <input type="checkbox" class="ace"/>
+                                                <span class="lbl"></span>
+                                            </label>
+                                        </td>
+                                        </td>
+                                        <td th:text="${user.userId}"></td>
+                                        <td th:text="${user.loginName}"></td>
+                                        <td th:text="${user.userName}"></td>
+                                        <td th:text="${user.phonenumber}"></td>
+                                        <td th:text="${user.status == 1} ? '正常' : '停用'"></td>
+                                        <td th:text="${#calendars.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                        <td>
+                                            <div class="hidden-sm hidden-xs btn-group">
+                                                <button class="btn btn-xs btn-info"
+                                                        th:onclick="'editUser('+${user.userId}+')'">
+                                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                </button>
+                                                <button class="btn btn-xs btn-danger"
+                                                        th:onclick="'deleteUser('+${user.userId}+')'">
+                                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div id="grid-pager" class="ui-jqgrid-pager ui-state-default ui-corner-bottom" dir="ltr"
+                                     style="width: 1353px;">
+                                    <div id="pg_grid-pager" class="ui-pager-control" role="group">
+                                        <table class="ui-pg-table ui-common-table ui-pager-table ">
+                                            <tbody>
+                                            <tr>
+                                                <td id="grid-pager_left" align="left">
+                                                    <table class="ui-pg-table navtable ui-common-table">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="add_grid-table" data-original-title="Add new row">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-plus-circle purple"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="edit_grid-table"
+                                                                data-original-title="Edit selected row">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-pencil blue"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="view_grid-table"
+                                                                data-original-title="View selected row">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-search-plus grey"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="del_grid-table"
+                                                                data-original-title="Delete selected row">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-trash-o red"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="ui-pg-button ui-state-disabled"
+                                                                style="width:4px;" data-original-title="" title=""><span
+                                                                    class="ui-separator"></span></td>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="search_grid-table"
+                                                                data-original-title="Find records">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-search orange"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="ui-pg-button ui-corner-all" title=""
+                                                                id="refresh_grid-table"
+                                                                data-original-title="Reload Grid">
+                                                                <div class="ui-pg-div"><span
+                                                                        class="ui-icon ace-icon fa fa-refresh green"></span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td id="grid-pager_center" align="center"
+                                                    style="white-space: pre; width: 337px;">
+                                                    <table class="ui-pg-table ui-common-table ui-paging-pager">
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div><!-- /.span -->
+                        </div><!-- /.row -->
+                        <div th:utext="${page}"></div>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
         </div>
-        <div class="page-content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <!-- PAGE CONTENT BEGINS -->
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <table id="simple-table" class="table  table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th class="bs-checkbox " style="width: 36px; " data-field="0" tabindex="0">
-                                        <div class="th-inner "><input name="btSelectAll" type="checkbox"></div>
-                                        <div class="fht-cell"></div>
-                                    </th>
-                                    <th>用户ID</th>
-                                    <th>登录名称</th>
-                                    <th>用户名称</th>
-                                    <th>手机</th>
-                                    <th class="hidden-480">状态</th>
-                                    <th class="hidden-480">创建时间</th>
-                                    <th class="hidden-480">操作</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                <!--<tr data-th-each="user : ${list}">-->
-                                <!--/*@thymesVar id="list" type="list"*/-->
-                                <tr th:each="user:${list}">
-                                    <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
-                                    <td th:text="${user.userId}"></td>
-                                    <td th:text="${user.loginName}"></td>
-                                    <td th:text="${user.userName}"></td>
-                                    <td th:text="${user.phonenumber}"></td>
-                                    <td th:text="${user.status==0} ? '正常' : '停用'"></td>
-                                    <td th:text="${#calendars.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                                    <td>
-                                        <div class="hidden-sm hidden-xs btn-group">
-
-                                            <button class="btn btn-xs btn-info" th:onclick="'editUser('+${user.userId}+')'">
-                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                            </button>
-
-                                            <button class="btn btn-xs btn-danger"
-                                                    th:onclick="'delUser('+${user.userId}+')'">
-                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                            </button>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div><!-- /.span -->
-                    </div><!-- /.row -->
-                    <div th:utext="${page}"></div>
-                    <!-- PAGE CONTENT ENDS -->
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.page-content -->
-    </div>
-</div><!-- /.main-content -->
+    </div><!-- /.breadcrumbs -->
+</div><!-- /.main-content-inner -->
 
 <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
     <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -170,6 +262,7 @@
 <script src="assets/js/buttons.colVis.min.js"></script>
 <script src="assets/js/dataTables.select.min.js"></script>
 <script src="assets/layer/layer.js"></script>
+<script src="leli/js/leli-ui.js"></script>
 
 <!-- ace scripts -->
 <script src="assets/js/ace-elements.min.js"></script>
@@ -193,7 +286,51 @@
                     "aaSorting": [],
                 });
 
+        //And for the first simple table, which doesn't have TableTools or dataTables
+        //select/deselect all rows according to table header checkbox
+        var active_class = 'active';
+        $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+            var th_checked = this.checked;//checkbox inside "TH" table header
 
+            $(this).closest('table').find('tbody > tr').each(function () {
+                var row = this;
+                if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+            });
+        });
+
+        //select/deselect a row when the checkbox is checked/unchecked
+        $('#simple-table').on('click', 'td input[type=checkbox]', function () {
+            var $row = $(this).closest('tr');
+            if ($row.is('.detail-row ')) return;
+            if (this.checked) $row.addClass(active_class);
+            else $row.removeClass(active_class);
+        });
+
+
+        $('#simple-table').on('click', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'detail') { //查看
+                //do somehing
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                //do something
+
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    , title: 'xxx'
+                });
+            }
+        });
     })
 
     function add() {
@@ -204,7 +341,7 @@
             title: "添加用户",
             fix: false,
             area: ['800px', '600px'],
-            content:  "/user/add",
+            content: "/user/add",
             shadeClose: true,
             btn: ['<i class="fa fa-check"></i> 确认', '<i class="fa fa-close"></i> 关闭'],
             yes: function (index, layero) {
@@ -216,10 +353,14 @@
         });
     }
 
+    function test() {
+
+    }
+
 
     //用户新增
     function addUser() {
-        var index = layer.open({
+        let index = layer.open({
                 title: "用户新增",
                 type: 2,
                 area: ['800px', '500px'],
@@ -232,42 +373,43 @@
 
     //用户修改
     function editUser(userId) {
-        var index = layer.open({
+        let index = layer.open({
                 title: "用户修改",
                 type: 2,
                 area: ['800px', '500px'],
+                btn: ['确定', '关闭'],
                 shadeClose: true, //点击遮罩关闭
-                content: '/user/edit?userId=' + userId,
-                fix: true
+                content: '/user/edit/' + userId,
+                fix: true,
+                yes: function (index, layero) {
+                    let iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler();
+                },
+                cancel: function (index) {
+                    return true;
+                }
             }
         );
     }
 
     //用户删除
-    function delUser(userId) {
-        layer.confirm("确认删除吗？", {
-                btn: ['确定', '取消']//按钮
-            }, function (index) {
-                $.ajax({
-                    url: '/user/remove?userId=' + userId,
-                    type: 'DELETE',
-                    dataType: 'json',
-                    data: $(".form-horizontal").serialize(),
-                    async: false,
-                    success: function (data) {
-                        if (data != null && true == data.succeed) {
-                            layer.msg("删除成功", {time: 1000}, function () {
-                                window.location.reload()
-                                layer.close();
-                            })
-                        } else {
-                            layer.msg(data.msg);
-                        }
-                    }
-                })
-            }
-        )
+    function deleteUser(userId) {
+        if (confirm("您确定要删除吗？")) {
+            $.ajax({
+                cache: true,
+                type: "DELETE",
+                url: "/user/remove/" + userId,
+                async: false,
+                error: function (request) {
+                    $.modal.alertError("系统错误");
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
     }
+
 </script>
 </body>
 </html>

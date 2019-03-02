@@ -35,6 +35,10 @@
         where user_id = #{userId}
     </select>
 
+    <select id="checkPhoneUnique" parameterType="String" resultMap="UserResult">
+		select user_id, phonenumber from sys_user where phonenumber=#{phonenumber}
+	</select>
+
 
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
         insert into sys_user(
